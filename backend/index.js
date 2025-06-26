@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 const app= express();
 
@@ -27,3 +28,4 @@ app.listen(PORT,()=>{
 
 app.use('/api/auth',authRoutes);
 app.use('/api/products',productRoutes);
+app.use('/api/orders',orderRoutes);
