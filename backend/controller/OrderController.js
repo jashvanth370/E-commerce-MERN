@@ -7,7 +7,7 @@ module.exports.createOrder = async (req, res, next) => {
         if (!orderItems || orderItems.length === 0) {
             return res.status(400).json({ message: 'No order items' });
         }
-
+        
         const order = new Order({
             user: req.user._id,
             orderItems,
