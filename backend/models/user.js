@@ -29,6 +29,11 @@ const UserSchema = new mongoose.Schema({
         type: Boolean, 
         default: false 
     },
+    products:
+    [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Product'
+    }],
 },{ timestamps: true });
 
 module.exports = mongoose.model('User',UserSchema);
