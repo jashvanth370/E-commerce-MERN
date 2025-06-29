@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.error("MongoDB error:", err));
 
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8089;
 
 
 app.use('/api/auth', authRoutes);

@@ -70,7 +70,7 @@ module.exports.getProductsByUser = async (req, res, next) => {
     res.status(200).json({
       products: products,
       success: true,
-      message: "Products fetched successfully"
+      message: "Products fetched by user Id  successfully"
     })
   } catch (error) {
     console.error("fetched Product Error:", error);
