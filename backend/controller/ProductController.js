@@ -1,9 +1,11 @@
 const User = require('../models/user');
 const Product = require('../models/product');
 
+
 module.exports.createProduct = async (req, res) => {
   try {
-    const { title, description, price, category, countInStock, image } = req.body;
+    const { title, description, price, category, countInStock } = req.body;
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : '';
 
     if (!title || !description || !price || !category || countInStock == null) {
       return res.status(400).json({ message: "All required fields must be filled." });
@@ -21,7 +23,7 @@ module.exports.createProduct = async (req, res) => {
       price,
       category,
       countInStock,
-      image
+      image: imagePath
     });
 
     const savedProduct = await newProduct.save();

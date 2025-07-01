@@ -5,6 +5,6 @@ const router = require('express').Router();
 
 router.get('/getAllUsers',getAllUsers);
 router.put('/updateUser',authMiddleware,updateUser);
-router.get('/getUser',authMiddleware, getUserById);
+router.get('/profile',authMiddleware, getUserById);
 
 module.exports = router;
