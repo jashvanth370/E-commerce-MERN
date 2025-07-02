@@ -18,13 +18,15 @@ module.exports.getAllUsers = async (req, res, next) => {
 module.exports.updateUser = async (req, res) => {
     try {
         const userId = req.user._id;
-        const { name, email, password, profilePic } = req.body;
+        const { name, email, password } = req.body;
 
         const updatedFields = {};
 
         if (name) updatedFields.name = name;
         if (email) updatedFields.email = email;
-        if (profilePic) updatedFields.profilePic = profilePic;
+        if (req.file) {
+            updatedFields.profilePic = `/uploads/${req.file.filename}`;
+        }
         if (password) {
             const salt = await bcrypt.genSalt(10);
             updatedFields.password = await bcrypt.hash(password, salt);
@@ -50,9 +52,9 @@ module.exports.updateUser = async (req, res) => {
     }
 };
 
-module.exports.getUserById = async (req, res, next) => {
+module.exports.profile = async (req, res, next) => {
     try {
-        const userId = req.body._id;
+        const userId = req.user._id;
         if (!userId) {
             res.status(404).json({ message: " User Not Found" });
             return res;

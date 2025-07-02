@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { login } from '../service/authApi';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -12,7 +12,10 @@ const LoginPage = () => {
         e.preventDefault();
         setError(null);
         try {
-            const res = await axios.post('http://localhost:8089/api/auth/login', { email, password });
+            const res = await login(email, password);
+            if (!res || !res.token) {
+                throw new Error('Invalid response from server');
+            }
             localStorage.setItem('token', res.token);
             navigate('/profile');
         } catch (err) {
