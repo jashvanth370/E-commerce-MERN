@@ -30,6 +30,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -45,18 +46,67 @@ const Home = () => {
     fetchProducts();
   }, []);
 
+  const handleCategoryClick = (category) => {
+    if (selectedCategory === category) {
+      // If clicking the same category, clear the filter
+      setSelectedCategory('');
+    } else {
+      setSelectedCategory(category);
+    }
+  };
+
+  const handleProductSelect = (product) => {
+    // You can add navigation to product detail page here
+    console.log('Selected product:', product);
+    // For now, just clear the search
+    setSearch('');
+  };
+
   const filteredProducts = products.filter(product =>
-    product.title.toLowerCase().includes(search.toLowerCase())
+    product.title.toLowerCase().includes(search.toLowerCase()) ||
+    product.category.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
       <Navbar />
-      <HeroSection />
-      <SearchBar search={search} setSearch={setSearch} />
-      <CategoriesSection />
+
+      {/* Hero Section with Search Bar Overlay */}
+      <section className="relative">
+        <HeroSection />
+
+        {/* Search Bar positioned at top left of hero */}
+        <div className="absolute top-8 left-8 z-20 w-80">
+          <SearchBar
+            search={search}
+            setSearch={setSearch}
+            products={products}
+            onProductSelect={handleProductSelect}
+          />
+        </div>
+      </section>
+
+      <CategoriesSection
+        selectedCategory={selectedCategory}
+        onCategoryClick={handleCategoryClick}
+      />
+      {selectedCategory && (
+        <div className="max-w-7xl mx-auto px-4 py-2">
+          <button
+            onClick={() => setSelectedCategory('')}
+            className="text-blue-600 hover:text-blue-800 font-medium"
+          >
+            ← Show All Products
+          </button>
+        </div>
+      )}
       <PromoBanner />
-      <FeaturedProducts products={filteredProducts} loading={loading} error={error} />
+      <FeaturedProducts
+        products={filteredProducts}
+        loading={loading}
+        error={error}
+        selectedCategory={selectedCategory}
+      />
       <TestimonialsSection />
       <NewsletterSignup />
       <Footer />
