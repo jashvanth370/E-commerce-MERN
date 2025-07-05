@@ -17,7 +17,12 @@ const LoginPage = () => {
                 throw new Error('Invalid response from server');
             }
             localStorage.setItem('token', res.token);
-            navigate('/profile');
+            if (res.user && res.user.isAdmin) {
+                localStorage.setItem('isAdmin', 'true');
+            } else {
+                localStorage.setItem('isAdmin', 'false');
+            }
+            navigate('/');
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed');
         }
