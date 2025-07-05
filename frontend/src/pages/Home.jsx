@@ -16,7 +16,7 @@ const categories = [
   { name: 'Home', icon: '🏠' },
   { name: 'Beauty', icon: '💄' },
   { name: 'Sports', icon: '🏀' },
-  { name: 'Toys', icon: '🧸' },
+  { name: 'Toys & Games', icon: '🧸' },
 ];
 
 const testimonials = [
