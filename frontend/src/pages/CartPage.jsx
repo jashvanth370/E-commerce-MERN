@@ -43,8 +43,26 @@ const CartPage = () => {
     };
 
     const handleCheckout = () => {
-        // Navigate to checkout page or show checkout modal
-        alert('Checkout functionality coming soon!');
+        // Check if user is logged in
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Please login to proceed with checkout');
+            navigate('/login');
+            return;
+        }
+
+        // Navigate to checkout page with cart data
+        const orderData = {
+            orderType: 'cart',
+            cartItems: cartItems,
+            totalPrice: getTotalPrice(),
+            orderItems: cartItems.map(item => ({
+                product: item._id,
+                qty: item.quantity
+            }))
+        };
+
+        navigate('/checkout', { state: { orderData } });
     };
 
     if (loading) {
