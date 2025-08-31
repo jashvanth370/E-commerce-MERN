@@ -6,10 +6,24 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const { auth } = require('express-oauth2-jwt-bearer');
+const csurf = require('csurf');
+const cookieParser = require('cookie-parser');
+const enforce = require('express-sslify');
+const fs = require('fs');
+const https = require('https');
 // const bodyParser = require('body-parser');
 // const path = require('path');
 // const cookieParser = require("cookie-parser");
 const path = require('path');
+
+const options = {
+  key: fs.readFileSync("./cert/key.pem"),
+  cert: fs.readFileSync("./cert/cert.pem"),
+};
+
+https.createServer(options, app).listen(process.env.PORT || 8089, () => {
+  console.log(`HTTPS server running on port ${process.env.PORT || 8089}`);
+});
 
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -29,9 +43,13 @@ app.use((req, res, next) => {
   next();
 });
 
-
+app.use(cookieParser());
 app.use(express.json({ limit: "100kb" }));
-app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 300 }));
+app.use(rateLimit({ 
+  windowMs: 15 * 60 * 1000, 
+  max: 300,
+  message: "Too many requests, please try again later.", 
+}));
 app.use(cors({
   origin: 'http://localhost:3000', // Replace with your frontend URL if different
   credentials: true, // If you need to send cookies or authentication headers
@@ -67,6 +85,17 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ error: err.message });
 });
 
+// CSRF protection (cookie-based)
+const csrfProtection = csurf({
+  cookie: {
+    httpOnly: true,
+    sameSite: "strict", // helps prevent CSRF
+  },
+});
+
+if (process.env.NODE_ENV === "production") {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
@@ -81,7 +110,12 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/subscribers', subscriberRoutes);
-app.use("/api/purchases", purchaseRoutes);
+app.use("/api/purchases", csrfProtection);
+
+// Provide CSRF token to frontend
+app.get("/api/csrf-token", (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);
