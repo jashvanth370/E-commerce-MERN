@@ -11,3 +11,17 @@ export const login = async (email, password) => {
         throw error.response ? error.response.data : new Error('Network error');
     }
 }
+
+export const register = async (formData) => {
+    try {
+        const response = await axios.post(`${API_URL}/register`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Registration error:', error);
+        throw error.response ? error.response.data : new Error('Network error');
+    }
+}
