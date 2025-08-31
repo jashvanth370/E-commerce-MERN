@@ -9,8 +9,12 @@ import AddProduct from './pages/AddProduct';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmation from './pages/OrderConfirmation';
+import AuthButtons from './components/AuthButton';
+import PurchaseForm from './components/PurchaseForm';
+import PurchaseHistory from './components/PurchaseHistory';
 
 function App() {
+  const [reload, setReload] = useState(false);
   return (
     <Router>
       <Routes>
@@ -22,6 +26,11 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <div>
+          <AuthButtons />
+          <PurchaseForm onSuccess={() => setReload(r => !r)} />
+          <PurchaseHistory key={reload} />
+        </div>
       </Routes>
     </Router>
   );
