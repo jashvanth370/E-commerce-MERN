@@ -17,7 +17,7 @@ const OrderConfirmation = () => {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="text-6xl mb-4">✅</div>
+                    <div className="text-6xl mb-4"></div>
                     <h2 className="text-2xl font-bold text-gray-800 mb-4">Order Placed Successfully!</h2>
                     <p className="text-gray-600 mb-8">Thank you for your purchase.</p>
                     <button
@@ -36,7 +36,7 @@ const OrderConfirmation = () => {
             <div className="max-w-4xl mx-auto px-4">
                 <div className="bg-white rounded-lg shadow-md p-8">
                     <div className="text-center mb-8">
-                        <div className="text-6xl mb-4">✅</div>
+                        <div className="text-6xl mb-4"></div>
                         <h1 className="text-3xl font-bold text-gray-800 mb-2">Order Confirmed!</h1>
                         <p className="text-gray-600">Thank you for your purchase. Your order has been placed successfully.</p>
                     </div>

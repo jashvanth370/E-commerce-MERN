@@ -16,14 +16,14 @@ const https = require('https');
 // const cookieParser = require("cookie-parser");
 const path = require('path');
 
-const options = {
-  key: fs.readFileSync("./cert/key.pem"),
-  cert: fs.readFileSync("./cert/cert.pem"),
-};
+// const options = {
+//   key: fs.readFileSync("./cert/key.pem"),
+//   cert: fs.readFileSync("./cert/cert.pem"),
+// };
 
-https.createServer(options, app).listen(process.env.PORT || 8089, () => {
-  console.log(`HTTPS server running on port ${process.env.PORT || 8089}`);
-});
+// https.createServer(options, app).listen(process.env.PORT || 8089, () => {
+//   console.log(`HTTPS server running on port ${process.env.PORT || 8089}`);
+// });
 
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
